@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransporTOM_Transposição de Escalas Musicais</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('saxofonista.jpg'); /* Certifique-se de ter uma imagem chamada 'saxofonista.jpg' no mesmo diretório */
+            background-size: width:auto;
+            background-attachment: no-repeat;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+        .container {
+            background-color: rgba(24, 7, 70, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        input, select, button {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TransporTOM</h1>
+        <label for="key">Tom a ser transportado:</label>
+        <input type="text" id="key" placeholder="Ex: C, D, E...">
+        <br>
+        <label for="instrument">Tipo de Instrumento:</label>
+        <select id="instrument">
+            <option value="Bb">Sax Tenor - Bb (Si bemol)</option>
+            <option value="Eb">Sax Alto - Eb (Mi bemol)</option>
+        </select>
+        <br>
+        <button onclick="transpose()">Transpor</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function transpose() {
+            const key = document.getElementById('key').value;
+            const instrument = document.getElementById('instrument').value;
+            const resultDiv = document.getElementById('result');
+
+            // Função de transposição (simplificada)
+            function transposeScale(scale, interval) {
+                const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+                return scale.map(note => {
+                    let index = notes.indexOf(note);
+                    if (index === -1) return note;
+                    return notes[(index + interval) % notes.length];
+                });
+            }
+
+            // Escalas base
+            const chromatic = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            const pentatonic = ['C', 'D', 'E', 'G', 'A'];
+            const pentablues = ['C', 'D#', 'F', 'F#', 'G', 'A#'];
+
+            // Intervalos de transposição
+            const intervals = {
+                'Bb': 2, // Sax Tenor
+                'Eb': -3 // Sax Alto
+            };
+
+            const interval = intervals[instrument];
+
+            // Transpor escalas
+            const transposedChromatic = transposeScale(chromatic, interval);
+            const transposedPentatonic = transposeScale(pentatonic, interval);
+            const transposedPentablues = transposeScale(pentablues, interval);
+
+            // Exibir resultados
+            resultDiv.innerHTML = `
+                <h2>Escalas Transportadas</h2>
+                <p><strong>Cromática:</strong> ${transposedChromatic.join(', ')}</p>
+                <p><strong>Pentatônica:</strong> ${transposedPentatonic.join(', ')}</p>
+                <p><strong>Pentablues:</strong> ${transposedPentablues.join(', ')}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
